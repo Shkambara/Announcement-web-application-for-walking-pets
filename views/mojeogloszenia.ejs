@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pet&go</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" onclick="loadLogo()">Pet&Go</a>
+                <ul class="nav-list">
+                    <li class="nav-item"><a onclick="loadList()">♥</a></li>
+                    <li class="nav-item-data"><a onclick="loadMe()">Dane osobowe</a></li>
+                    <li class="nav-item-data"><a onclick="loadMyOg()">Moje ogłoszenia</a></li>
+                    <li class="nav-item-data"><a onclick="loadHistory()">Historia Ogłoszeń</a></li>
+                    <li class="nav-item"><a onclick="loadOglo()">Dodaj Ogloszenie</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="history-content-centre">
+            <% posts.forEach((post) => { %>
+            <div class="skargi-content">
+                <div class="skargi-info">
+                    <label>
+                        <%= post.tytul %></label>
+                    <label>DATA:
+                        <%= post.data %></label>
+                    <label> Z:
+                        <%= post.czasod %></label>
+                    <label> Do:
+                        <%= post.czasdo %></label>
+                </div>
+                <div class="skargi-buttons">
+                    <div class="<%= post._id%>" id="postID"></div>
+                    <button id="<%= post._id %>" onclick="loadPost(this.id)">obserwuj</button>
+                    <button id="<%= post._id %>" onclick="loadEdit(this.id)">Edit</button>
+                    <button id="<%= post._id %>" onclick="deleteObj(this.id)">Usuń</button>
+                </div>
+            </div>
+            <div class="line">
+                <hr>
+            </div>
+            <% }) %>
+        </div>
+    </main>
+</body>
+
+<script>
+    var url = new URL(window.location.href);
+    var user = url.searchParams.get("user");
+    var pass = url.searchParams.get("pass");
+    function loadLogo() {
+        document.location.replace("http://localhost:7000/indexLoggedin?user=" + user + "&pass=" + pass);
+    }
+    function loadMe() {
+        document.location.replace("http://localhost:7000/daneOsobowe?user=" + user + "&pass=" + pass);
+    }
+    function loadOglo() {
+        document.location.replace("http://localhost:7000/dodanieOgloszenia?user=" + user + "&pass=" + pass);
+    }
+    function loadMyOg() {
+        document.location.replace("http://localhost:7000/mojeogloszenia?user=" + user + "&pass=" + pass);
+    }
+    function loadog() {
+        var id = document.getElementById("postID").className;
+        document.location.replace("http://localhost:7000/ogloszenieLoggedin?user=" + user + "&pass=" + pass + "&id=" + id);
+    }
+    function loadEdit(id) {
+        document.location.replace("http://localhost:7000/editOgloszenia?user=" + user + "&pass=" + pass + "&id=" + id);
+    }
+    function deleteObj(id) {
+        var xhttp = new XMLHttpRequest();
+        var url = new URL(window.location.href);
+        var user = url.searchParams.get("user");
+        var pass = url.searchParams.get("pass");
+
+        xhttp.addEventListener('load', function (event) {
+            var res = JSON.parse(this.responseText).result;
+            if (res == true) {
+                console.log("GOING");
+                var id = document.getElementById("postID").className;
+                document.location.replace("http://localhost:7000/mojeogloszenia?user=" + user + "&pass=" + pass);
+            } else {
+                alert("Fail");
+            }
+        })
+
+        // new HttpRequest instance 
+        xhttp.open("POST", "/deleteOgloszenie");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({ 'data': { id } }));
+    }
+
+    function loadList() {
+        document.location.replace("http://localhost:7000/listawpodoban?user=" + user + "&pass=" + pass);
+    }
+
+    function loadHistory() {
+        document.location.replace("http://localhost:7000/historiaOgloszen?user=" + user + "&pass=" + pass);
+    }
+    function loadPost(id){
+        document.location.replace("http://localhost:7000/ogloszenieLoggedin?user=" + user + "&pass=" + pass + "&id=" + id);
+    }
+</script>
+
+</html>

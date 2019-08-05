@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" href="http://localhost:7000/">Pet&Go</a>
+                <ul class="nav-list">
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="registre">
+        <div class="reg-content-centre">
+            <div class="regTitle-block">
+                <h4>Please fill the columns to register</h4>
+            </div>
+            <div class="reg-block">
+                <p>Imie</p>
+                <input type="text" id="imie">
+            </div>
+            <div class="reg-block">
+                <p>Nazwisko</p>
+                <input type="text" id="nazwisko">
+            </div>
+            <div class="reg-block">
+                <p>Username</p>
+                <input type="text" id="username">
+            </div>
+            <div class="reg-block">
+                <p>Email</p>
+                <input type="email" id="email">
+            </div>
+            <div class="reg-block">
+                <p>Miasto</p>
+                <input type="text" id="miasto">
+            </div>
+            <div class="reg-block">
+                <p>Password</p>
+                <input type="password" id="password">
+            </div>
+            <div class="reg-block">
+                <p>Reapeat password</p>
+                <input type="password" id="password2">
+            </div>
+            <div class="reg-block">
+                <p>PESEL</p>
+                <input type="text" id="pesel">
+            </div>
+            <div class="reg-block">
+                <p>Data Urodzenia</p>
+                <input type="date" id="date" max="2016-12-31">
+            </div>
+            <div class="reg-block">
+                <p>Numer telefonu</p>
+                <input type="tel" id="telephone">
+            </div>
+            <br>
+            <div class="regbutton-block">
+                <a class="button" onclick="loadDoc()">Register</a>
+            </div>
+
+        </div>
+    </main>
+</body>
+
+<script>
+    function loadDoc() {
+
+        var trigger = false;
+        var xhttp = new XMLHttpRequest();
+
+        if (document.getElementById("imie").value != null && document.getElementById("imie").value != "") {
+            var imie = document.getElementById("imie").value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById("nazwisko").value != null && document.getElementById("nazwisko").value != "") {
+            var nazwisko = document.getElementById("nazwisko").value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('miasto').value != null && document.getElementById("miasto").value != "") {
+            var miasto = document.getElementById('miasto').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('password').value != null && document.getElementById("password").value != "") {
+            var password = document.getElementById('password').value;
+
+            if (document.getElementById('password2').value != null && document.getElementById("password2").value != "") {
+                var password2 = document.getElementById('password2').value;
+
+                if (password != password2) {
+                    alert("please repeat password correctly");
+                    trigger = true;
+                }
+            }
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('email').value != null && document.getElementById("email").value != "") {
+            var email = document.getElementById('email').value;
+            var testStr = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (!testStr.test(email)) {
+                alert("Email is invalid, please change your email to correct version inorder to register");
+                trigger = true;
+            }
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('telephone').value != null && document.getElementById("telephone").value != "") {
+            var telephone = document.getElementById('telephone').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('pesel').value != null && document.getElementById("pesel").value != "") {
+            var pesel = document.getElementById('pesel').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('date').value != null && document.getElementById("date").value != "") {
+            var data = document.getElementById('date').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('username').value != null && document.getElementById("username").value != "") {
+            var username = document.getElementById('username').value;
+        } else {
+            trigger = true;
+        }
+
+        xhttp.addEventListener('load', function (event) {
+            var res = JSON.parse(this.responseText).result;
+            if (res == true) {
+                console.log("true");
+                document.location.replace("http://localhost:7000/indexLoggedin?user=" + username + "&pass=" + password);
+            }
+
+        })
+
+        if (trigger == false) {
+            xhttp.open("POST", "/insert");
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.send(JSON.stringify({ 'data': { username, imie, nazwisko, pesel, email, password, miasto, data, telephone } }));
+            return true;
+        } else {
+            alert("please fill all columns");
+        }
+    }
+</script>
+
+</html>

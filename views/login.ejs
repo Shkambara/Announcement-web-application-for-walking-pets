@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" href="http://localhost:7000/">Pet&Go</a>
+                <ul class="nav-list">
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="registre">
+        <div class="reg-content-centre">
+            <div class="regTitle-block">
+                <h2>Welcome Back</h2>
+                <h4>Please fill the columns to login</h4>
+            </div>
+            <div class="reg-block">
+                <p>Username</p>
+                <input type="text" id="username">
+            </div>
+            <div class="reg-block">
+                <p>Password</p>
+                <input type="password" id="password">
+            </div>
+            <br>
+            <div class="regbutton-block">
+                <a class="button" onclick="loadDoc()">Sign in</a>
+            </div>
+            <br>
+            <div class="regbutton-block">
+                <a class="button" href="register.html">Sign up</a>
+            </div>
+
+        </div>
+    </main>
+
+
+</body>
+<script>
+
+    function loadDoc() {
+        var xhttp = new XMLHttpRequest();
+
+        var trigger = false;
+
+        if (document.getElementById("username").value != null && document.getElementById("username").value != "") {
+            var username = document.getElementById("username").value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById("password").value != null && document.getElementById("password").value != "") {
+            var password = document.getElementById("password").value;
+        } else {
+            trigger = true;
+        }
+
+        xhttp.addEventListener('load', function (event) {
+            var res = JSON.parse(this.responseText).result;
+            if (res == true) {
+                console.log("true");
+                document.location.replace("http://localhost:7000/indexLoggedin?user=" + username + "&pass=" + password);
+            } else {
+                alert("Wrong password or username");
+            }
+        })
+
+
+        if (trigger == false) {
+            xhttp.open("POST", "/loginUser");
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.send(JSON.stringify({ 'data': { username, password } }));
+        } else {
+            alert("please fill all columns");
+        }
+    }
+</script>
+
+</html>

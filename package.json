@@ -1,0 +1,19 @@
+{
+  "name": "petandgo",
+  "version": "1.0.0",
+  "description": "Tin project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Dmytro Shkambara",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "handlebars": "^4.0.12",
+    "mongodb": "^4.0",
+    "mongoose": "^5.4.3"
+  }
+}

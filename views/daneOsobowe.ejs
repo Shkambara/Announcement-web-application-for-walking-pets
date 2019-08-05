@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pet&go</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" onclick="loadLogo()">Pet&Go</a>
+                <ul class="nav-list">
+                    <li class="nav-item"><a onclick="loadList()">♥</a></li>
+                    <li class="nav-item-data"><a onclick="loadMe()">Dane osobowe</a></li>
+                    <li class="nav-item-data"><a onclick="loadMyOg()">Moje ogłoszenia</a></li>
+                    <li class="nav-item-data"><a onclick="loadHistory()">Historia Ogłoszeń</a></li>
+                    <li class="nav-item"><a onclick="loadOglo()">Dodaj Ogloszenie</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container content-column">
+            <section class="content-column-1">
+                <div class="content">
+                    <p>Imie</p>
+                    <label>
+                        <%= doc.Name %></label>
+                    <p>Nazwisko</p>
+                    <label>
+                        <%= doc.Surname %></label>
+                    <p>PESEL</p>
+                    <label>
+                        <%= doc.pesel %></label>
+                    <p>Numer telefonu</p>
+                    <label>
+                        <%= doc.Telefon %></label>
+
+                </div>
+            </section>
+
+            <div class="your-photo">
+                <p>Twoje zdjecie</p>
+                <img src="img/hand.jpg" alt="advertisement" width="161" height="233">
+            </div>
+        </div>
+    </main>
+</body>
+
+<script>
+    var url = new URL(window.location.href);
+    var user = url.searchParams.get("user");
+    var pass = url.searchParams.get("pass");
+
+
+    function loadLogo() {
+        document.location.replace("http://localhost:7000/indexLoggedin?user=" + user + "&pass=" + pass);
+    }
+    function loadMe() {
+        document.location.replace("http://localhost:7000/daneOsobowe?user=" + user + "&pass=" + pass);
+    }
+    function loadOglo() {
+        document.location.replace("http://localhost:7000/dodanieOgloszenia?user=" + user + "&pass=" + pass);
+    }
+    function loadMyOg() {
+        document.location.replace("http://localhost:7000/mojeogloszenia?user=" + user + "&pass=" + pass);
+    }
+    function loadList() {
+        document.location.replace("http://localhost:7000/listawpodoban?user=" + user + "&pass=" + pass);
+    }
+
+    function loadHistory() {
+        document.location.replace("http://localhost:7000/historiaOgloszen?user=" + user + "&pass=" + pass);
+    }
+</script>
+
+</html>

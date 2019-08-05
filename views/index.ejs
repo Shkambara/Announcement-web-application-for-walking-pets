@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pet&go</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" href="http://localhost:7000/">Pet&Go</a>
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="http://localhost:7000/dodanieogloszenia">Dodaj Ogloszenie</a></li>
+                    <li class="nav-item"><a href="http://localhost:7000/login">Login</a></li>
+                    <li class="nav-item"><a href="http://localhost:7000/register">Register</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container content-column">
+            <section class="content-column-1">
+                <div class="filter">
+                    <div class="miasto-block">
+                        <p>Miasto</p>
+                        <input type="text" value="" id="miasto">
+                    </div>
+                    <div class="data-block">
+                        <p>Data</p>
+                        <input type="date" id="data" value="">
+                    </div>
+                    <div class="button-block">
+                        <a class="button">Szukaj</a>
+                    </div>
+                </div>
+
+                <div class="content" id="cont">
+                    <% posts.forEach((post) => { %>
+                    <section>
+                        <div class="info-header">
+                            <h1><a href="http://localhost:7000/ogloszenie?id=<%= post._id %>">
+                                    <%= post.tytul %></a></h1>
+                            <ul class="info-list">
+                                <li class="info-item"><a href="http://localhost:7000/ogloszenie?id=<%=post._id %>">
+                                        Miasto:
+                                        <%= post.miasto %>
+                                    </a></li>
+                                <li class="info-item"><a href="http://localhost:7000/ogloszenie?id=<%=post._id %>">
+                                        <%= post.data %>
+                                    </a></li>
+                                <li class="info-item"><a href="http://localhost:7000/ogloszenie?id=<%=post._id %>">
+                                        Z:
+                                        <%= post.czasod %>
+                                    </a></li>
+                                <li class="info-item"><a href="http://localhost:7000/ogloszenie?id=<%=post._id %>">
+                                        Do:
+                                        <%= post.czasdo %>
+                                    </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="info-full">
+                            <p class="image"><a href="http://localhost:7000/ogloszenie?id=<%= post._id %>">
+                                    <img src="img/psina.jpg" alt="Twarina" width="246" height="255">
+                                </a></p>
+
+                            <p class="character"><a href="http://localhost:7000/ogloszenie?id=<%= post._id %>">
+                                    <%= post.opis %>
+                                    <br>
+                                </a></p>
+                        </div>
+                    </section>
+                    <div class="datawystawienia" id="but">
+                        <button onclick="loadLogin()"> wpodobaj </button>
+                    </div>
+                    <div class="datawystawienia">
+                        <time><a href="http://localhost:7000/ogloszenie?id=<%= post._id %>">
+                                data wystawienia:
+                                <%= post.datadod %>
+                            </a></time>
+                    </div>
+                    <div class="line">
+                        <hr>
+                    </div>
+                    <% }) %>
+                </div>
+            </section>
+            <div class="advertisement content-column-2">
+                <img src="img/hand.jpg" alt="advertisement" width="250" height="375">
+            </div>
+        </div>
+    </main>
+</body>
+<script>
+    function loadData() {
+        var MongoClient = mongodb.MongoClient;
+
+        var url = "mongodb://localhost:27017/";
+
+        MongoClient.connect(url, function (err, db) {
+            if (err) throw err;
+            var dbo = db.db("pet&go");
+            console.log("connected")
+            var resultArray = [];
+            var cursor = dbo.collection("users").find({});
+            cursor.forEach(function (doc, err) {
+                loadContent(doc);
+
+            });
+        });
+    }
+
+    function loadDoc() {
+        var xhttp = new XMLHttpRequest();
+        var miasto = document.getElementById('miasto').value;
+        var data = document.getElementById('data').value;
+
+        xhttp.open("POST", "/loadBase");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        if (!(miasto == "" && data == "")) xhttp.send(JSON.stringify({ 'data': { miasto, data } }));
+    }
+
+    function loadLogin() {
+        document.location.replace("http://localhost:7000/login");
+    }
+
+</script>
+
+</html>

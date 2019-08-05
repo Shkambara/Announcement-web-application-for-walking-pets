@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" onclick="loadLogo()">Pet&Go</a>
+                <ul class="nav-list">
+                    <li class="nav-item"><a onclick="loadList()">♥</a></li>
+                    <li class="nav-item-data"><a onclick="loadMe()">Dane osobowe</a></li>
+                    <li class="nav-item-data"><a onclick="loadMyOg()">Moje ogłoszenia</a></li>
+                    <li class="nav-item-data"><a onclick="loadHistory()">Historia Ogłoszeń</a></li>
+                    <li class="nav-item"><a onclick="loadOglo()">Dodaj Ogloszenie</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="registre">
+        <div class="history-content-centre">
+            <% posts.forEach((post) => { %>
+            <div class="ogloszenie">
+                <div class="ogloszenie-labels">
+                    <div class="tytulogl-block">
+                        <label>
+                            <%= post.tytul %></label>
+                    </div>
+                    <div class="dataogl-block">
+                        <label>DATA:
+                            <%= post.data %> </label>
+                    </div>
+                    <div class="czasodogl-block">
+                        <label>Z:
+                            <%= post.czasod %></label>
+                    </div>
+                    <div class="czasdoogl-block">Do:
+                        <label>
+                            <%= post.czasdo %></label>
+                    </div>
+                </div>
+                <div class="ogloszenie-buttons">
+                    <div class="skargaogloszenie-block">
+                        <button onclick="al()">Skarga</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="datawystawienia">
+                <label>data wystawienia:
+                    <%= post.datadod %></label>
+            </div>
+            <div class="line">
+                <hr>
+            </div>
+            <% }) %>
+
+        </div>
+    </main>
+</body>
+<script>
+    var url = new URL(window.location.href);
+    var user = url.searchParams.get("user");
+    var pass = url.searchParams.get("pass");
+
+    function al() {
+        var answer = window.prompt("Skarga");
+        if (answer) {
+            alert("Twoja skarga została wysłana");
+        }
+    }
+    function loadLogo() {
+        document.location.replace("http://localhost:7000/indexLoggedin?user=" + user + "&pass=" + pass);
+    }
+    function loadMe() {
+        document.location.replace("http://localhost:7000/daneOsobowe?user=" + user + "&pass=" + pass);
+    }
+    function loadOglo() {
+        document.location.replace("http://localhost:7000/dodanieOgloszenia?user=" + user + "&pass=" + pass);
+    }
+    function loadMyOg() {
+        document.location.replace("http://localhost:7000/mojeogloszenia?user=" + user + "&pass=" + pass);
+    }
+    function loadHistory() {
+        document.location.replace("http://localhost:7000/historiaOgloszen?user=" + user + "&pass=" + pass);
+    }
+    function loadList() {
+        document.location.replace("http://localhost:7000/listawpodoban?user=" + user + "&pass=" + pass);
+    }
+</script>
+
+</html>

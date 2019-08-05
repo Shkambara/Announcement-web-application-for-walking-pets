@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dodanie Ogloszenia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" onclick="loadLogo()">Pet&Go</a>
+                <ul class="nav-list">
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="content-centre">
+            <div class="dodOgl-block">
+                <h1>Dodanie ogłoszenia</h1>
+            </div>
+            <div class="tytul-block">
+                <p>Tytuł</p>
+                <input type="text" class="data-content" id="tytul" value="">
+            </div>
+            <div class="miastoOgl-block">
+                <p>Miasto</p>
+                <input type="text" class="data-content" id="miasto" value=<%=doc.Miasto %>>
+            </div>
+            <div class="photo-block">
+                <p>Photo</p>
+                <input type="file" class="photo-content" id="photo" value="">
+                <img src="" alt="photo">
+            </div>
+            <div class="opis-block">
+                <p>Opis</p>
+                <textarea name="" class="data-content" cols="30" rows="10" id="opis"></textarea>
+            </div>
+            <div class="numertelefonu-block">
+                <p>Numer telefonu</p>
+                <input type="tel" class="data-content" id="telephone" value=<%=doc.Telefon %>>
+                <p>Data i czas realizacji</p>
+            </div>
+
+            <div class="data-time-block">
+                <label>Data</label>
+                <input type="date" class="date-time-content" id="date" value="">
+                <label>Czas Od</label>
+                <input type="time" class="data-time-content" id="czasod" value="" onclick="minTimeOd()">
+                <label>Czas Do</label>
+                <input type="time" class="data-time-content" id="czasdo" value="" onclick="minTimeDo()">
+            </div>
+            <div class="submit-block">
+                <a class="button" onclick="loadDoc()">Dodaj Ogłoszenie</a>
+            </div>
+
+        </div>
+    </main>
+</body>
+<script>
+    var url = new URL(window.location.href);
+    var user = url.searchParams.get("user");
+    var pass = url.searchParams.get("pass");
+
+    function minTimeDo() {
+        if (document.getElementById('czasod').value != null && document.getElementById("czasod").value != "") {
+            var timeOd = document.getElementById('czasod').value;
+            var timeDo = document.getElementById("czasdo").min = timeOd;
+
+        }
+
+    }
+    function minTimeOd() {
+        console.log("here");
+        if (document.getElementById('czasod').value != null && document.getElementById("czasod").value != "") {
+            
+            var time = document.getElementById('czasod').value;
+            document.getElementById('czasdo').innerHTML = time;
+        }
+
+    }
+
+    function loadDoc() {
+        var xhttp = new XMLHttpRequest();
+
+        var trigger = false;
+
+        if (document.getElementById("tytul").value != null && document.getElementById("tytul").value != "") {
+            var tytul = document.getElementById("tytul").value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById("miasto").value != null && document.getElementById("miasto").value != "") {
+            var miasto = document.getElementById("miasto").value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('photo').value != null && document.getElementById("photo").value != "") {
+            var photo = document.getElementById('photo').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('opis').value != null && document.getElementById("opis").value != "") {
+            var opis = document.getElementById('opis').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('czasod').value != null && document.getElementById("czasod").value != "") {
+            var czasod = document.getElementById('czasod').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('telephone').value != null && document.getElementById("telephone").value != "") {
+            var telephone = document.getElementById('telephone').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('czasdo').value != null && document.getElementById("czasdo").value != "") {
+            var czasdo = document.getElementById('czasdo').value;
+        } else {
+            trigger = true;
+        }
+        if (document.getElementById('date').value != null && document.getElementById("date").value != "") {
+            var data = document.getElementById('date').value;
+        } else {
+            trigger = true;
+        }
+
+        if (trigger == false) {
+            xhttp.addEventListener('load', function (event) {
+                var result = JSON.parse(this.responseText).result;
+                if (result == true) {
+                    if (user != null) {
+                        document.location.replace("http://localhost:7000/indexLoggedin?user=" + user + "&pass=" + pass);
+                    } else {
+                        document.location.replace("http://localhost:7000/");
+                    }
+                } else {
+                    alert("Fail");
+                }
+
+            })
+
+            // new HttpRequest instance 
+            xhttp.open("POST", "/insertOgloszenie");
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.send(JSON.stringify({ 'data': { user, tytul, miasto, photo, opis, czasdo, telephone, data, czasod } }));
+        }else{
+            alert("please fill all the columns");
+        }
+    }
+
+    function loadLogo() {
+        if (user != null && pass != null) {
+            document.location.replace("http://localhost:7000/indexLoggedin?user=" + user + "&pass=" + pass);
+        } else {
+            document.location.replace("http://localhost:7000/");
+        }
+    }
+</script>
+
+</html>

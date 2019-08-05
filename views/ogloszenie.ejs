@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pet&go</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" href="http://localhost:7000/">Pet&Go</a>
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="http://localhost:7000/dodanieogloszenia">Dodaj Ogloszenie</a></li>
+                    <li class="nav-item"><a href="http://localhost:7000/login">Login</a></li>
+                    <li class="nav-item"><a href="http://localhost:7000/register">Register</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container content-column">
+            <section class="content-column-1">
+                <div class="content">
+                    <section>
+                        <div class="info-header">
+                            <h1><a href="http://localhost:7000/ogloszenie?id=<%= doc._id %>">
+                                    <%= doc.tytul %></a></h1>
+                        </div>
+
+                        <div class="info-full">
+                            <p class="image">
+                                <img src="img/psina.jpg" alt="Twarina" width="246" height="255">
+                            </p>
+
+                            <p class="character">
+                                <%= doc.opis %>
+                                <br>
+                                <time>
+                                    data wystawienia:
+                                    <%= doc.datadod %>
+                                </time>
+                            </p>
+                        </div>
+                        <div class="info-data-column">
+                            <div class="info-labels">
+                                <label>Miasto</label>
+                                <label>Data</label>
+                                <label>Czas Od</label>
+                                <label>Czas Do</label>
+                                <label>Telefon</label>
+                                <label>Email</label>
+                            </div>
+                            <div class="info-labels">
+                                <label>
+                                    <%= doc.miasto %></label>
+                                <label>
+                                    <%= doc.data %></label>
+                                <label>
+                                    <%= doc.czasod %></label>
+                                <label>
+                                    <%= doc.czasdo %></label>
+                                <label>
+                                    <%= doc.telephone %></label>
+                                <label>
+                                    <%= doc.email %></label>
+                            </div>
+                            <div class="info-labels-right">
+                                <h4>Skontaktuj się</h4>
+                                <label>Email osobisty</label>
+                                <input type="email" id="emailToSend">
+                                <textarea cols="30" rows="10" id="text"></textarea>
+                                <button class="button" onclick="send()">Send</button>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="line">
+                        <hr>
+                    </div>
+
+                </div>
+            </section>
+
+            <div class="advertisement content-column-2">
+                <img src="img/hand.jpg" alt="advertisement" width="250" height="375">
+            </div>
+        </div>
+    </main>
+</body>
+<script>
+    var url = new URL(window.location.href);
+    var id = url.searchParams.get("id");
+
+    function send() {
+        var email = document.getElementById("emailToSend").value;
+        var testStr = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!testStr.test(email)) {
+            alert("Email is invalid, please change your email to correct version inorder to register");
+            return false;
+        } else {
+            document.getElementById("emailToSend").innerHTML = "";
+            document.getElementById("text").innerHTML = "";
+            alert("Email was sent")
+            return true;
+        }
+    }
+</script>
+
+</html>

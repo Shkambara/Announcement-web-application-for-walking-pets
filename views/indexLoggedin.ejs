@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pet&go</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="nav-bar">
+                <a class="logo" onclick="loadLogo()">Pet&Go</a>
+                <ul class="nav-list">
+                    <li class="nav-item"><a onclick="loadList()">♥</a></li>
+                    <li class="nav-item"><a onclick="loadMe()">Moje Konto</a></li>
+                    <li class="nav-item"><a onclick="loadOglo()">Dodaj Ogloszenie</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container content-column">
+            <section class="content-column-1">
+                <div class="filter">
+                    <div class="miasto-block">
+                        <p>Miasto</p>
+                        <input type="text" value="text">
+                    </div>
+                    <div class="data-block">
+                        <p>Data</p>
+                        <input type="text" value="data">
+                    </div>
+                    <div class="czas-block">
+                        <p>Czas od</p>
+                        <input type="text" value="godz/min">
+                    </div>
+                    <div class="Czas-2-block">
+                        <p>Czas do</p>
+                        <input type="text" value="godz/min">
+                    </div>
+                    <div class="typ-block">
+                        <p>Typ zwierza</p>
+                        <input type="text" value="text goes here">
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" name="Wynagoroda">
+                        <label for="">Wynagoroda</label>
+                    </div>
+                    <div class="button-block">
+                        <a class="button" href="#">Szukaj</a>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <% posts.forEach((post) => { %>
+                    <section>
+                        <div class="<%= post._id %>" id="postID"></div>
+                        <div class="info-header">
+                            <h1><a id="<%= post._id %>" onclick="loadPost(this.id)">
+                                    <%= post.tytul %></a></h1>
+                            <ul class="info-list">
+                                <li class="info-item"><a id="<%= post._id %>" onclick="loadPost(this.id)">
+                                        Miasto:
+                                        <%= post.miasto %>
+                                    </a></li>
+                                <li class="info-item"><a id="<%= post._id %>" onclick="loadPost(this.id)">
+                                        <%= post.data %>
+                                    </a></li>
+                                <li class="info-item"><a id="<%= post._id %>" onclick="loadPost(this.id)">
+                                        Z:
+                                        <%= post.czasod %>
+                                    </a></li>
+                                <li class="info-item"><a id="<%= post._id %>" onclick="loadPost(this.id)">
+                                        Do:
+                                        <%= post.czasdo %>
+                                    </a></li>
+                            </ul>
+                        </div>
+
+                        <div class="info-full">
+                            <p class="image"><a id="<%= post._id %>" onclick="loadPost(this.id)">
+                                    <img src="img/psina.jpg" alt="Twarina" width="246" height="255">
+                                </a></p>
+
+                            <p class="character"><a id="<%= post._id %>" onclick="loadPost(this.id)">
+                                    <%= post.opis %>
+                                    <br>
+                                </a></p>
+                        </div>
+                    </section>
+                    <div class="datawystawienia" id="lab<%= post._id %>"></div>
+                    <%if (post.wpodobane == false) { %>
+
+                    <div class="datawystawienia" id="but<%= post._id %>">
+                        <button id="<%= post._id %>" onclick="loadLogin(this.id)"> wpodobaj </button>
+                    </div>
+                    <% }else{ %>
+                    <div class="datawystawienia" id="but<%= post._id %>">
+                        <label> wpodobane</label>
+                    </div>
+                    <% } %>
+                    <div class="datawystawienia">
+                        <time><a href="http://localhost:7000/ogloszenieLogedin?id=<%= post._id %>">
+                                data wystawienia:
+                                <%= post.datadod %>
+                            </a></time>
+                    </div>
+                    <div class="line">
+                        <hr>
+                    </div>
+                    <% }) %>
+                </div>
+            </section>
+
+            <div class="advertisement content-column-2">
+                <img src="img/hand.jpg" alt="advertisement" width="250" height="375">
+            </div>
+        </div>
+    </main>
+</body>
+
+<script>
+
+    // var posts = "<%=posts %>";
+
+    var url = new URL(window.location.href);
+    var user = url.searchParams.get("user");
+    var pass = url.searchParams.get("pass");
+
+    function loadMe() {
+        document.location.replace("http://localhost:7000/daneOsobowe?user=" + user + "&pass=" + pass);
+    }
+    function loadOglo() {
+        document.location.replace("http://localhost:7000/dodanieOgloszenia?user=" + user + "&pass=" + pass);
+    }
+    function loadLogo() {
+        document.location.replace("http://localhost:7000/indexLoggedin?user=" + user + "&pass=" + pass);
+    }
+
+    function loadPost(id) {
+        document.location.replace("http://localhost:7000/ogloszenieLoggedin?user=" + user + "&pass=" + pass + "&id=" + id);
+    }
+
+    function loadLogin(id) {
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.open("POST", "/insertwpodobanie");
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        console.log(id);
+        xhttp.send(JSON.stringify({ 'data': { id, user } }));
+
+        var lab = document.getElementById("lab" + id);
+        var x = document.getElementById("but" + id);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+            var label = document.createElement('label');
+            label.innerHTML = "wpodobane";
+            lab.appendChild(label);
+        }
+
+        alert("Ogloszenie dodane do listy wpodoban");
+
+    }
+    function loadList() {
+        document.location.replace("http://localhost:7000/listawpodoban?user=" + user + "&pass=" + pass);
+    }
+
+</script>
+
+</html>
